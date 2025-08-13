@@ -1,8 +1,8 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { DetectedSign, AppSettings } from "../types";
 import { Eye, TrendingUp, Activity } from "lucide-react";
-import { HandGesture } from "../utils/signLanguageProcessor";
+import type { AppSettings, DetectedSign } from "../types";
+import type { HandGesture } from "../utils/signLanguageProcessor";
 
 interface DetectionPanelProps {
   detectedSigns: DetectedSign[];

@@ -1,4 +1,4 @@
-import { Results } from '@mediapipe/hands';
+import type { Results } from '@mediapipe/hands';
 
 // Hand landmark indices for key positions
 const LANDMARK_INDICES = {

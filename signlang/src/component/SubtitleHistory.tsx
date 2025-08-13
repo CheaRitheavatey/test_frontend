@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Subtitle } from "../types";
 import { FileText, Download, Trash2, Clock } from "lucide-react";
+import type { Subtitle } from "../types";
 
 interface SubtitleHistoryProps {
   subtitles: Subtitle[];

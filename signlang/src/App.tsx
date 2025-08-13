@@ -1,35 +1,113 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useMediaPipeDetection } from "./hooks/useMediapipeDetection";
+import type { AppSettings } from "./types";
+// import { DetectedSign, AppSettings } from "../types";
+// import { useMediaPipeDetection } from "./useMediaPipeDetection";
 
-function App() {
-  const [count, setCount] = useState(0)
+const SIGN_TRANSLATIONS = {
+  english: {
+    Hello: "Hello",
+    "Thank you": "Thank you",
+    Please: "Please",
+    Sorry: "Sorry",
+    Yes: "Yes",
+    No: "No",
+    Help: "Help",
+    Good: "Good",
+    Bad: "Bad",
+    Happy: "Happy",
+    Sad: "Sad",
+    Love: "Love",
+    Family: "Family",
+    Work: "Work",
+    Home: "Home",
+  },
+  spanish: {
+    Hello: "Hola",
+    "Thank you": "Gracias",
+    Please: "Por favor",
+    Sorry: "Lo siento",
+    Yes: "Sí",
+    No: "No",
+    Help: "Ayuda",
+    Good: "Bueno",
+    Bad: "Malo",
+    Happy: "Feliz",
+    Sad: "Triste",
+    Love: "Amor",
+    Family: "Familia",
+    Work: "Trabajo",
+    Home: "Casa",
+  },
+  khmer: {
+    Hello: "សួស្តី",
+    "Thank you": "អរគុណ",
+    Please: "សូម",
+    Sorry: "សុំទោស",
+    Yes: "បាទ",
+    No: "ទេ",
+    Help: "ជួយ",
+    Good: "ល្អ",
+    Bad: "មិនល្អ",
+    Happy: "រីករាយ",
+    Sad: "ព្រួយ",
+    Love: "ស្រលាញ់",
+    Family: "គ្រួសារ",
+    Work: "ការងារ",
+    Home: "ផ្ទះ",
+  },
+};
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+export const useSignDetection = (settings: AppSettings) => {
+  const {
+    isInitialized,
+    isDetecting,
+    currentGesture,
+    detectedSigns: rawDetectedSigns,
+    canvasRef,
+    startDetection: startMediaPipeDetection,
+    stopDetection: stopMediaPipeDetection,
+    clearDetections: clearMediaPipeDetections,
+  } = useMediaPipeDetection();
 
-export default App
+  // Filter signs based on confidence threshold
+  const detectedSigns = rawDetectedSigns.filter(
+    (sign) => sign.confidence >= settings.minConfidence
+  );
+
+  const startDetection = useCallback(
+    (videoElement?: HTMLVideoElement) => {
+      if (videoElement && isInitialized) {
+        startMediaPipeDetection(videoElement);
+      }
+    },
+    [startMediaPipeDetection, isInitialized]
+  );
+
+  const stopDetection = useCallback(() => {
+    stopMediaPipeDetection();
+  }, [stopMediaPipeDetection]);
+  // const translateSign = useCallback(
+  //   (sign: string): string => {
+  //     const translations = SIGN_TRANSLATIONS[settings.language];
+  //     return translations[sign] || sign;
+  //   },
+  //   [settings.language]
+  // );
+
+  const clearDetections = useCallback(() => {
+    clearMediaPipeDetections();
+  }, [clearMediaPipeDetections]);
+
+  return {
+    isInitialized,
+    detectedSigns,
+    currentGesture,
+    isDetecting,
+    canvasRef,
+    startDetection,
+    stopDetection,
+    clearDetections,
+    // translateSign,
+  };
+};

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AppSettings } from "../types";
+import type { AppSettings } from "../types";
 
 interface SubtitleOverlayProps {
   currentSubtitle: string;

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, Upload, RotateCcw } from "lucide-react";
-import { VideoState } from "../types";
+import type { VideoState } from "../types";
 import { motion } from "framer-motion";
 
 interface VideoPlayerProps {

@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { AppSettings } from "../types";
 import { Settings, Globe, Type, Monitor, Eye, Sliders } from "lucide-react";
+import type { AppSettings } from "../types";
 
 interface SettingsPanelProps {
   settings: AppSettings;
